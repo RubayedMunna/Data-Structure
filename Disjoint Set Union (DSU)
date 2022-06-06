@@ -1,1 +1,35 @@
 
+//Disjoint Set Union
+#define DSU_Size 30
+ll parent[DSU_Size];
+ll size_[DSU_Size];
+void make_set(ll v)
+{
+    parent[v]=v;
+    size_[v]=1;
+ }
+ll find_set(ll v)
+{
+    if(v==parent[v])
+    {
+        return v;
+    }
+    else 
+    {
+        return parent[v]=find_set(parent[v]);
+    }
+}
+void union_sets(ll a,ll b)
+{
+    ll m=find_set(a);
+    ll n=find_set(b);
+    if(m!=n)
+    {
+        if(size_[m]<size_[n])
+        {
+            swap(m,n);
+        }
+        parent[n]=parent[m];
+        size_[m]+=size_[n];
+    }
+}
