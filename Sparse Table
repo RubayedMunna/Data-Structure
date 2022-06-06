@@ -1,1 +1,35 @@
+#define ll long long
+#define N '\n'
+/// Sparse Table DS and Functions
 
+const ll MAX=100000;
+const ll lg=18;
+ll ara[MAX];
+ll ST[lg][MAX];
+ll n;
+void Sparse_Table()
+{
+    ll k=floor(log2(n));
+    for(ll i=0;i<n;i++)
+    {
+        ST[0][i]=ara[i];
+    }
+    for(ll i=1;i<=k;i++)
+    {
+        for(ll j=0;j+(1<<i)<=n;j++)
+        {
+            ST[i][j]=min(ST[i-1][j],ST[i-1][j+(1<<(i-1))]);
+            //cout<<ST[i][j]<<" ";
+        }
+        //cout<<N;
+    }
+}
+
+///accessing Data from Sparse Table
+
+ll left,right;
+cin>>left>>right;
+
+ll nb=right-left+1;
+nb=log2(nb);
+cout<<min(ST[nb][left],ST[nb][right-(1<<nb)+1])<<N;
