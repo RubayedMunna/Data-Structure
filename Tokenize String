@@ -6,7 +6,7 @@ void tokenize(string str,vector<string>& words)
     ss<<str;
     while(ss>>str)
     {
-        words.insert(str);
+        words.push_back(str);
     }
 }
 int main()
