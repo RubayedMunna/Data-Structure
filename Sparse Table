@@ -33,3 +33,7 @@ cin>>left>>right;
 ll nb=right-left+1;
 nb=log2(nb);
 cout<<min(ST[nb][left],ST[nb][right-(1<<nb)+1])<<N;
+
+
+
+
