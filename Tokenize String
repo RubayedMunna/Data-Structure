@@ -1,1 +1,28 @@
+///Tokenize String
+
+void tokenize(string str,vector<string>& words)
+{
+    stringstream ss;
+    ss<<str;
+    while(ss>>str)
+    {
+        words.insert(str);
+    }
+}
+int main()
+{
+    string str;
+    vector<string>words;
+    while(getline(cin,str))
+    {
+        tokenize(str,words);
+    }
+    for(ll i=0;i<words.size();i++)
+    {
+        cout<<words[i]<<" ";
+    }
+    cout<<N;
+
+}
+
 
