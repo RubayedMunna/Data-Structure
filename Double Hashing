@@ -1,0 +1,117 @@
+/// Double hashing
+
+
+
+ll Binary_Exponentiation(ll a,ll b)
+{
+    if(b==0)
+    {
+        return 1;
+    }
+    ll xx=Binary_Exponentiation(a,b/2);
+    ll yy=(xx*xx)%Mod;
+    if(b%2)
+    {
+        yy=(yy*a)%Mod;
+    }
+    return yy;
+}
+void solve(ll test)
+{
+	ll len,len_b;
+	cin>>len>>len_b;
+    string a;
+    cin>>a;
+    
+    //First Hash
+    
+    ll hash_a[len+10];
+    ll MI[len+10];
+    ll power[len+10];
+    ll d=1;
+    ll mm=0;
+    hash_a[0]=0;
+    for(ll i=0;i<len;i++)
+    {
+        power[i]=d;
+        ll zz=((a[i]-48)*d)%Mod;
+        mm=(mm+zz)%Mod;
+        hash_a[i]=mm;
+        d=(d*97)%Mod;
+        
+    }
+    
+    MI[0]=1;
+    for(ll i=1;i<len;i++)
+    {
+		MI[i]=Binary_Exponentiation(power[i],Mod-2);
+    }
+    
+    //Second Hash
+    
+    ll hash_a1[len+10];
+    ll MI1[len+10];
+    ll power1[len+10];
+    d=1;
+    mm=0;
+    hash_a1[0]=0;
+    for(ll i=0;i<len;i++)
+    {
+        power1[i]=d;
+        ll zz=((a[i]-48)*d)%Mod;
+        mm=(mm+zz)%Mod;
+        hash_a1[i]=mm;
+        d=(d*53)%Mod;
+    }
+    
+    MI1[0]=1;
+    for(ll i=1;i<len;i++)
+    {
+		MI1[i]=Binary_Exponentiation(power1[i],Mod-2);
+    }
+    
+    // Thak ar hash kora lagbe na
+    
+    
+    set<pair<ll,ll> > st;
+    for(ll j=0;j<len-len_b+1;j++)
+    {
+		ll xx;
+		if(j==0)
+		{
+			xx=hash_a[j+len_b-1];
+		}
+		else
+        {	
+			xx=hash_a[j+len_b-1]-hash_a[j-1];
+            if(xx<=0)
+			{
+				xx=xx+Mod;
+				
+			}
+			xx=(xx*MI[j])%Mod;
+		}
+		
+		
+		ll xx1;
+		if(j==0)
+		{
+			xx1=hash_a1[j+len_b-1];
+		}
+		else
+        {	
+			xx1=hash_a1[j+len_b-1]-hash_a1[j-1];
+            if(xx1<=0)
+			{
+				xx1=xx1+Mod;
+				
+			}
+			xx1=(xx1*MI1[j])%Mod;
+			
+		}
+		st.insert(make_pair(xx,xx1));
+	}
+	cout<<st.size()<<N;
+}
+
+
