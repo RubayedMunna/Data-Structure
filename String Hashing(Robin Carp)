@@ -1,0 +1,107 @@
+///Single Hashing
+// Finding a Substring in a String
+
+
+
+ll Binary_Exponentiation(ll a,ll b)
+{
+    if(b==0)
+    {
+        return 1;
+    }
+    ll xx=Binary_Exponentiation(a,b/2);
+    ll yy=(xx*xx)%Mod;
+    if(b%2)
+    {
+        yy=(yy*a)%Mod;
+    }
+    return yy;
+}
+void solve(ll test)
+{
+    string a;
+    cin>>a;
+    ll len=a.size();
+    ll hash_a[len+10];
+    ll MI[len+10];
+    ll power[len+10];
+    
+    ll d=1;
+    ll mm=0;
+    hash_a[0]=0;
+    for(ll i=0;i<len;i++)
+    {
+        power[i]=d;
+        ll zz=((a[i]-48)*d)%Mod;
+        mm=(mm+zz)%Mod;
+        hash_a[i]=mm;
+        d=(d*97)%Mod;
+        
+    }
+    
+    MI[0]=1;
+    for(ll i=1;i<len;i++)
+    {
+		MI[i]=Binary_Exponentiation(power[i],Mod-2);
+    }
+    
+    ll kk;
+    cin>>kk;
+    
+    for(ll i=1;i<=kk;i++)
+    {
+        string b;
+        cin>>b;
+        ll len_b=b.size();
+        ll hash_b=0;
+        ll dd=1;
+        for(ll j=0;j<len_b;j++)
+        {
+            ll zz=((b[j]-48)*dd)%Mod;
+            hash_b=(hash_b+zz)%Mod;
+            dd=(dd*97)%Mod;
+        }
+        bool flg=false;
+        for(ll j=0;j<len-len_b+1;j++)
+        {
+            ll xx;
+            if(j==0)
+            {
+                xx=hash_a[j+len_b-1];
+            }
+            else
+            { 
+				
+                xx=hash_a[j+len_b-1]-hash_a[j-1];
+                if(xx<=0)
+                {
+					xx=xx+Mod;
+					
+				}
+				xx=(xx*MI[j])%Mod;
+				
+				if(xx==hash_b)
+				{
+					flg=true;
+					break;
+				}
+            }
+            //cout<<"hash_b = "<<hash_b<<" \t"<<"xx = "<<xx<<N;
+            if(xx==hash_b)
+            {
+                flg=true;
+                break;
+            }
+        }
+        if(flg)
+        {
+            cout<<'Y'<<N;
+        }
+        else
+        {
+            cout<<'N'<<N;
+        }
+    }
+}
+
+
