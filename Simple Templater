@@ -1,1 +1,130 @@
 
+
+
+
+///string to integer
+ll s2i(string str)
+{
+    stringstream ss;
+    ss<<str;
+    ll x;
+    ss>>x;
+    return x;
+}
+
+///Integer to String
+string i2s(ll x)
+{
+    string str;
+    stringstream ss;
+    ss<<x;
+    ss>>str;
+    return str;
+}
+
+///Tokenizing String
+
+void tokenize(string str,vector<string>& words)
+{
+    stringstream ss;
+    ss<<str;
+    while(ss>>str)
+    {
+        words.push_back(str);
+    }
+}
+
+/// GCD function
+ll gcd(ll a,ll b)
+{
+    if(b==0)
+    {
+        return a;
+    }
+    else
+    {
+        return gcd(b,a%b);
+    }
+}
+
+///Power Function
+
+ll power(ll a,ll b)
+{
+    ll res=1;
+    a%=1000000000000000007LL;
+    assert(b>=0);
+    for(; b; b>>=1)
+    {
+        if(b&1)res=res*a%1000000000000000007LL;
+        a=a*a%1000000000000000007LL;
+    }
+    return res;
+}
+
+///Decimal to Binary
+
+string in2bin(ll n)
+{
+    string ans="";
+    while(n)
+    {
+        ll last=n%2;
+        n/=2;
+        char ch=last+'0';
+        ans=ch+ans;
+    }
+    return ans;
+}
+/// Binary to Decimal
+
+ll bin2in(string str)
+{
+    ll ans=0;
+    ll pow=1;
+    ll siz=str.size();
+    for(ll i=siz-1; i>=0; i--)
+    {
+        ans+=(str[i]-'0')*pow;
+        pow*=2;
+    }
+    return ans;
+}
+
+///Making Two String Equal
+
+void equal_string(string &str1,string &str2)
+{
+    ll len1=str1.size();
+    ll len2=str2.size();
+    ll extra=fabs(len1-len2);
+    if(len1<len2)
+    {
+        while(extra--)
+        {
+            str1="0"+str1;
+        }
+    }
+    else if(len1>len2)
+    {
+        while(extra--)
+        {
+            str2="0"+str2;
+        }
+    }
+}
+
+/// checking palindrome
+
+bool is_pal(string str)
+{
+    ll len=str.size();
+    for(ll i=0; i<len; i++)
+    {
+        if(str[i]!=str[len-i-1])
+        {
+            return false;
+        }
+    }
+    return true;
+}
