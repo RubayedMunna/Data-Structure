@@ -1,5 +1,27 @@
 
 
+///Two Pointer
+
+ll num,left=1,right=n;
+
+bool flg=false;
+while(left<right)
+{
+    if((arr[left]+arr[right])==num)
+    {
+        /// Number is found
+    }
+    else if((arr[left]+arr[right])>num)
+    {
+        ///Number won't be found
+    }
+    else
+    {
+        ///Number can be found
+        left++;
+    }
+}
+
 
 
 ///string to integer
