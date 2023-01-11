@@ -1,39 +1,47 @@
-#define ll long long
-#define N '\n'
-/// Sparse Table DS and Functions
 
-const ll MAX=100000;
-const ll lg=18;
-ll ara[MAX];
-ll ST[lg][MAX];
+
+///Range Minimum Query
+
+const ll Width=1e5+9;
+const ll Height=log2(Width);
+ll ST[Height+10][Width];
+ll arr[Width];
 ll n;
-void Sparse_Table()
-{
-    ll k=floor(log2(n));
-    for(ll i=0;i<n;i++)
-    {
-        ST[0][i]=ara[i];
-    }
-    for(ll i=1;i<=k;i++)
-    {
-        for(ll j=0;j+(1<<i)<=n;j++)
-        {
-            ST[i][j]=min(ST[i-1][j],ST[i-1][j+(1<<(i-1))]);
-            //cout<<ST[i][j]<<" ";
-        }
-        //cout<<N;
-    }
-}
-
-///accessing Data from Sparse Table
-
-ll left,right;
-cin>>left>>right;
-
-ll nb=right-left+1;
-nb=log2(nb);
-cout<<min(ST[nb][left],ST[nb][right-(1<<nb)+1])<<N;
+void build(){ll k=floor(log2(n));for(ll i=0;i<n;i++){ST[0][i]=arr[i];}for(ll i=1;i<=k;i++){for(ll j=0;(j+(1<<i))<=n;j++){ST[i][j]=min(ST[i-1][j],ST[i-1][j+(1<<(i-1))]);}}}
+ll query(ll l,ll r){ll len=(r-l+1);ll nb=log2(len);return min(ST[nb][l],ST[nb][r-(1<<nb)+1]);}
 
 
+/// Range Sum Query
+
+const ll Width = 1e5+9;
+const ll Height= log2(Width);
+ll ST[Height+1][Width];
+ll arr[Width];
+ll n;
+void build(){ll lg=ceil(log2(n));for(ll j=0;j<n;j++){ST[0][j]=arr[j];}for(ll i=1;i<=lg;i++){for(ll j=0;(j+(1<<i))<=n;j++){ST[i][j]=ST[i-1][j]+ST[i-1][j+(1<<(i-1))];}}}
+ll query(ll l,ll r){ll len=r-l+1;ll sum=0;while(len>0){ll lg=log2(len);sum+=ST[lg][l];l+=(1<<lg);len-=(1<<lg);}return sum;}
+
+
+///Range GCD Qeury
+
+const ll Width=1e5+9;
+const ll Height=log2(Width);
+
+ll ST[Height+10][Width];
+ll arr[Width];
+ll n;
+void build(){ll k=floor(log2(n));for(ll i=0;i<n;i++){ST[0][i]=arr[i];}for(ll i=1;i<=k;i++){for(ll j=0;(j+(1<<i))<=n;j++){ST[i][j]=__gcd(ST[i-1][j],ST[i-1][j+(1<<(i-1))]);}}}
+ll query(ll l,ll r){ll len=(r-l+1);ll nb=log2(len);return __gcd(ST[nb][l],ST[nb][r-(1<<nb)+1]);}
+
+
+/// Range Xor Query
+
+const ll Width = 1e5+9;
+const ll Height= log2(Width);
+ll ST[Height+1][Width];
+ll arr[Width];
+ll n;
+void build(){ll lg=ceil(log2(n));for(ll j=0;j<n;j++){ST[0][j]=arr[j];}for(ll i=1;i<=lg;i++){for(ll j=0;(j+(1<<i))<=n;j++){ST[i][j]=ST[i-1][j]^ST[i-1][j+(1<<(i-1))];}}}
+ll query(ll l,ll r){ll len=r-l+1;ll Xor=0;while(len>0){ll lg=log2(len);Xor^=ST[lg][l];l+=(1<<lg);len-=(1<<lg);}return Xor;}
 
 
