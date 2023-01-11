@@ -1,1 +1,105 @@
+///Range Sum Query Without Lazy Propagation
+
+const ll Size=2e5+9;
+
+struct seg
+{
+    vector<ll>tree;
+    ll n;
+    seg(){}
+    seg(ll x)
+    {
+        this->n=x;
+        tree.assign(4*Size,0);
+    }
+    void build(vector<ll>&v,ll n){build(v,1,0,n-1);}void build(vector<ll>&v,ll node,ll st,ll en){if(st==en){tree[node]=v[st];return;}ll mid=(st+en)>>1;build(v,2*node,st,mid);build(v,2*node+1,mid+1,en);tree[node]=tree[2*node]+tree[2*node+1];}
+    void update(ll idx,ll val){update(1,0,n-1,idx,val);}
+    void update(ll node,ll st,ll en,ll idx,ll val){if(st==en&&st==idx){tree[node]=val;return;}ll mid=(st+en)>>1;if(idx<=mid){update(2*node,st,mid,idx,val);}else{update(2*node+1,mid+1,en,idx,val);}tree[node]=tree[2*node]+tree[2*node+1];}
+    ll query(ll l,ll r){return query(1,0,n-1,l,r);}
+    ll query(ll node,ll st,ll en,ll l,ll r){if(l>r)return 0;if(st>=l&&en<=r){return tree[node];}ll mid=(st+en)>>1;if(r<=mid){return query(2*node,st,mid,l,r);}else if(l>mid){return query(2*node+1,mid+1,en,l,r);}else{return query(2*node,st,mid,l,mid)+query(2*node+1,mid+1,en,mid+1,r);}}
+};
+
+///Range Minimum Query Without Lazy Propagation
+
+const ll Size=2e5+9;
+ 
+struct seg
+{
+    vector<ll>tree;
+    ll n;
+    seg(){}
+    seg(ll x)
+    {
+        this->n=x;
+        tree.assign(4*Size,0);
+    }
+    void build(vector<ll>&v,ll n){build(v,1,0,n-1);}
+    void build(vector<ll>&v,ll node,ll st,ll en){if(st==en){tree[node]=v[st];return;}ll mid=(st+en)>>1;build(v,2*node,st,mid);build(v,2*node+1,mid+1,en);tree[node]=min(tree[2*node],tree[2*node+1]);}
+    void update(ll idx,ll val){update(1,0,n-1,idx,val);}
+    void update(ll node,ll st,ll en,ll idx,ll val){if(st==en&&st==idx){tree[node]=val;return;}ll mid=(st+en)>>1;if(idx<=mid){update(2*node,st,mid,idx,val);}else{update(2*node+1,mid+1,en,idx,val);}tree[node]=min(tree[2*node],tree[2*node+1]);}
+ 
+    ll query(ll l,ll r){return query(1,0,n-1,l,r);}
+    ll query(ll node,ll st,ll en,ll l,ll r){if(l>r)return 0;if(st>=l&&en<=r){return tree[node];}ll mid=(st+en)>>1;if(r<=mid){return query(2*node,st,mid,l,r);}else if(l>mid){return query(2*node+1,mid+1,en,l,r);}else{return min(query(2*node,st,mid,l,mid),query(2*node+1,mid+1,en,mid+1,r));}}
+};
+
+
+Range Xor Query Without Lazy Propagation
+
+const ll Size=2e5+9;
+ 
+struct seg
+{
+    vector<ll>tree;
+    ll n;
+    seg(){}
+    seg(ll x)
+    {
+        this->n=x;
+        tree.assign(4*Size,0);
+    }
+    void build(vector<ll>&v,ll n){build(v,1,0,n-1);}
+    void build(vector<ll>&v,ll node,ll st,ll en){if(st==en){tree[node]=v[st];return;}ll mid=(st+en)>>1;build(v,2*node,st,mid);build(v,2*node+1,mid+1,en);tree[node]=tree[2*node]^tree[2*node+1];}
+    void update(ll idx,ll val){update(1,0,n-1,idx,val);}
+    void update(ll node,ll st,ll en,ll idx,ll val){if(st==en&&st==idx){tree[node]=val;return;}ll mid=(st+en)>>1;if(idx<=mid){update(2*node,st,mid,idx,val);}else{update(2*node+1,mid+1,en,idx,val);}tree[node]=tree[2*node]^tree[2*node+1];}
+    ll query(ll l,ll r){return query(1,0,n-1,l,r);}
+    ll query(ll node,ll st,ll en,ll l,ll r){if(l>r)return 0;if(st>=l&&en<=r){return tree[node];}ll mid=(st+en)>>1;if(r<=mid){return query(2*node,st,mid,l,r);}else if(l>mid){return query(2*node+1,mid+1,en,l,r);}else{return query(2*node,st,mid,l,mid)^query(2*node+1,mid+1,en,mid+1,r);}}
+};
+
+///Range Sum and Range Update With Lazy
+
+const ll Size=2e5+9;
+ 
+struct seg
+{
+    vector<ll>tree;
+    vector<ll>lazy;
+    ll n;
+    seg(){}
+    seg(ll x)
+    {
+        this->n=x;
+        tree.assign(4*Size,0);
+        lazy.assign(2*Size,0);
+    }
+    void push(ll node){tree[2*node]+=lazy[node];tree[2*node+1]+=lazy[node];lazy[2*node]+=lazy[node];lazy[2*node+1]+=lazy[node];lazy[node]=0;}
+    void build(vector<ll>&v,ll n){build(v,1,0,n-1);}
+    void build(vector<ll>&v,ll node,ll st,ll en){if(st==en){tree[node]=v[st];return;}ll mid=(st+en)>>1;build(v,2*node,st,mid);build(v,2*node+1,mid+1,en);tree[node]=tree[2*node]+tree[2*node+1];}
+    void update(ll l,ll r,ll val){update(1,0,n-1,l,r,val);}
+    void update(ll node,ll st,ll en,ll l,ll r,ll val){if(l>r){return;}if(st==l&&en==r){tree[node]+=val;lazy[node]+=val;return;}push(node);ll mid=(st+en)>>1;if(r<=mid){update(2*node,st,mid,l,r,val);}else if(l>mid){update(2*node+1,mid+1,en,l,r,val);}else{update(2*node,st,mid,l,mid,val);update(2*node+1,mid+1,en,mid+1,r,val);}tree[node]=tree[2*node]+tree[2*node+1];}
+    ll query(ll l,ll r){return query(1,0,n-1,l,r);}
+    ll query(ll node,ll st,ll en,ll l,ll r){if(l>r)return 0;if(st>=l&&en<=r){return tree[node];}push(node);ll mid=(st+en)>>1;if(r<=mid){return query(2*node,st,mid,l,r);}else if(l>mid){return query(2*node+1,mid+1,en,l,r);}else{return query(2*node,st,mid,l,mid)+query(2*node+1,mid+1,en,mid+1,r);}}
+};
+
+
+///2D Segment Tree
+
+const ll Size=1e3+9;
+
+ll Tree[4*Size][4*Size];
+ll a[Size][Size];
+ll n,m;
+void build_y(int vx, int lx, int rx, int vy, int ly, int ry) {if (ly == ry) {if (lx == rx)Tree[vx][vy] = a[lx][ly];else Tree[vx][vy] = Tree[vx*2][vy] + Tree[vx*2+1][vy];} else {int my = (ly + ry) / 2;build_y(vx, lx, rx, vy*2, ly, my);build_y(vx, lx, rx, vy*2+1, my+1, ry);Tree[vx][vy] = Tree[vx][vy*2] + Tree[vx][vy*2+1];}}
+void build_x(int vx, int lx, int rx) {if (lx != rx) {int mx = (lx + rx) / 2;build_x(vx*2, lx, mx);build_x(vx*2+1, mx+1, rx);}build_y(vx, lx, rx, 1, 0, m-1);}
+int sum_y(int vx, int vy, int tly, int try_, int ly, int ry) {if (ly > ry)return 0;if (ly == tly && try_ == ry)return Tree[vx][vy];int tmy = (tly + try_) / 2;return sum_y(vx, vy*2, tly, tmy, ly, min(ry, tmy))+ sum_y(vx, vy*2+1, tmy+1, try_, max(ly, tmy+1), ry);}
+int sum_x(int vx, int tlx, int trx, int lx, int rx, int ly, int ry) {if (lx > rx)return 0;if (lx == tlx && trx == rx)return sum_y(vx, 1, 0, m-1, ly, ry);int tmx = (tlx + trx) / 2;return sum_x(vx*2, tlx, tmx, lx, min(rx, tmx), ly, ry)+ sum_x(vx*2+1, tmx+1, trx, max(lx, tmx+1), rx, ly, ry);}
 
