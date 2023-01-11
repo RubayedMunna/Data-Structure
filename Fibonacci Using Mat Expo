@@ -1,1 +1,63 @@
 
+
+
+
+ll mod=10001LL;
+ll arr[3][3];
+ll ans[3][3];
+void Mat_Mul(ll a[3][3],ll b[3][3])
+{
+    ll temp[3][3];
+    for(ll i=1;i<=2;i++)
+    {
+        for(ll j=1;j<=2;j++)
+        {
+            temp[i][j]=0;
+            for(ll k=1;k<=2;k++)
+            {
+                temp[i][j]=(temp[i][j]+(a[i][k]*b[k][j])%mod)%mod;
+            }
+        }
+    }
+    for(ll i=1;i<=2;i++)
+    {
+        for(ll j=1;j<=2;j++)
+        {
+            ans[i][j]=temp[i][j];
+        }
+    }
+}
+void Mat_Expo(ll n)
+{
+    if(n==0)
+    {
+        ans[1][1]=1;
+        ans[1][2]=0;
+        ans[2][1]=0;
+        ans[2][2]=1;
+        return;
+    }
+
+    Mat_Expo(n/2);
+    Mat_Mul(ans,ans);
+    if(n%2)
+    {
+        Mat_Mul(ans,arr);
+    }
+}
+
+int main()
+{
+    arr[1][1]=1;
+    arr[1][2]=1;
+    arr[2][1]=1;
+    arr[2][2]=0;
+
+    cout<<"Enter a number: ";
+    ll n;
+    cin>>n;
+
+    Mat_Expo(n-1);
+    cout<<n<<" th fibonacci number is "<<ans[1][1]<<N;
+}
+
