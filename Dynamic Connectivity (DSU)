@@ -1,0 +1,170 @@
+
+#include<bits/stdc++.h>
+#include<ext/pb_ds/assoc_container.hpp>
+using namespace std;
+using namespace __gnu_pbds;
+using u64 = uint64_t;
+using u128 = __uint128_t;
+#define ll long long
+#define N '\n'
+#define pi pair<ll,ll>
+#define Fast ios::sync_with_stdio(false); cin.tie(NULL)
+#define File freopen("in.txt","r",stdin)
+
+const ll siz=3e5+9;
+map<pi,ll>mp;
+vector<ll>qr;
+vector<pi>Tree[siz*4];
+
+ll parent[siz];
+ll Size[siz];
+ll res[siz];
+ll visited[siz];
+ll component;
+stack<ll>stk;
+
+void make_parent(ll n)
+{
+    for(ll i=1;i<=n;i++)
+    {
+        parent[i]=i;
+        Size[i]=1;
+    }
+
+    component=n;
+    while(stk.size())stk.pop();
+}
+
+ll find_parent(ll node)
+{
+    while(node!=parent[node])
+    {
+        node=parent[node];
+    }
+    return node;
+}
+
+void union_sets(ll u,ll v)
+{
+    ll m=find_parent(u);
+    ll n=find_parent(v);
+
+    if(m==n)return;
+    --component;
+
+    if(m>n)
+    {
+        swap(m,n);
+    }
+    stk.push(m);
+
+    Size[n]+=Size[m];
+    parent[m]=n;
+}
+
+void rollback(ll sz)
+{
+    while(stk.size()>sz)
+    {
+        ll u=stk.top();
+        stk.pop();
+        Size[parent[u]]-=Size[u];
+        parent[u]=u;
+        ++component;
+    }
+}
+
+void update(ll node,ll st,ll en,ll l,ll r,pi &p)
+{
+    if(st>r||en<l)
+    {
+        return;
+    }
+    if(st>=l&&en<=r)
+    {
+        Tree[node].push_back(p);
+        return;
+    }
+
+    ll mid=(st+en)>>1;
+    update(2*node,st,mid,l,r,p);
+    update(2*node+1,mid+1,en,l,r,p);
+}
+
+void DFS(ll node,ll st,ll en)
+{
+    ll sz=stk.size();
+    for(auto x:Tree[node])
+    {
+        union_sets(x.first,x.second);
+    }
+
+    if(st==en)
+    {
+        if(visited[st])cout<<component<<N;
+        rollback(sz);
+        return;
+    }
+
+    ll mid=(st+en)>>1;
+    DFS(2*node,st,mid);
+    DFS(2*node+1,mid+1,en);
+    rollback(sz);
+}
+
+void solve(ll tst)
+{
+    ll n,m;
+    cin>>n>>m;
+    make_parent(n);
+
+    for(ll i=1;i<=m;i++)
+    {
+        string ch;
+        cin>>ch;
+        if(ch=="?")
+        {
+            visited[i]=1;
+            continue;
+        }
+
+        ll u,v;
+        cin>>u>>v;
+        if(u>v)swap(u,v);
+
+        pi p ={u,v};
+
+        if(ch=="+")
+        {
+            mp[p]=i;
+        }
+        else
+        {
+            update(1,1,m,mp[p],i,p);
+            mp.erase(p);
+        }
+    }
+
+    for(auto x:mp)
+    {
+        pi p=x.first;
+        update(1,1,m,x.second,m,p);
+    }
+
+    DFS(1,1,max(1LL,m));
+    return;
+}
+
+int main()
+{
+    Fast;
+    //File;
+    ll t=1;
+    //cin>>t;
+    ll tst=0;
+    while(t--)
+    {
+        solve(++tst);
+    }
+    return 0;
+}
