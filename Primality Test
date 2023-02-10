@@ -1,0 +1,45 @@
+
+
+
+///Miller Rabin Primality Test
+/*
+u64 binpower(u64 base, u64 e, u64 mod) {u64 result = 1;base %= mod;while (e) {if (e & 1)result = (u128)result * base % mod;base = (u128)base * base % mod;e >>= 1;}return result;}
+bool check_composite(u64 n, u64 a, u64 d, int s) {u64 x = binpower(a, d, n);if (x == 1 || x == n - 1)return false;for (int r = 1; r < s; r++) {x = (u128)x * x % n;if (x == n - 1)return false;}return true;};
+bool MillerRabin(u64 n, int iter=5) {if (n < 4)return n == 2 || n == 3;int s = 0;u64 d = n - 1;while ((d & 1) == 0) {d >>= 1;s++;}for (int i = 0; i < iter; i++) {int a = 2 + rand() % (n - 3);if (check_composite(n, a, d, s))return false;}return true;}
+*/
+
+///Sieve
+
+const ll maxn=1e6+50;
+
+ll prime[maxn];
+set<ll>st;
+void sieve()
+{
+
+    for(ll i=2;i<maxn;i+=2)
+    {
+        prime[i]=1;
+    }
+    prime[0]=1;
+    prime[1]=1;
+    prime[2]=0;
+    for(ll i=3;i*i<maxn;i+=2)
+    {
+        if(prime[i]==0)
+        {
+            for(ll j=i*i;j<maxn;j+=i)
+            {
+                prime[j]=1;
+            }
+        }
+    }
+
+    for(ll i=1;i<=maxn;i++)
+    {
+        if(prime[i]==0)
+        {
+            st.insert(i);
+        }
+    }
+}
